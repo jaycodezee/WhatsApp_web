@@ -41,7 +41,7 @@ cleardata.addEventListener("click", () => {
     return;
   }
 
-  console.log("this --->", userId, otherUserId);
+  // console.log("this --->", userId, otherUserId);
 
   fetch("http://localhost:3000/user/deleteChatMessages", {
     method: "DELETE",
@@ -96,6 +96,7 @@ function openProfile(el, data_id, msg) {
 
   const div = document.createElement("div");
   div.setAttribute("id", "usersChat");
+  
   const ul = document.createElement("ul");
   ul.setAttribute("id", data_id);
 
@@ -122,6 +123,9 @@ function openProfile(el, data_id, msg) {
   emojiButton.innerHTML = "😊";
   emojiButton.setAttribute("id", "emojiButton");
 
+  const attachButton = document.createElement("button");
+  attachButton.innerHTML = '<i class="fa-solid fa-paperclip"></i>';
+
   button.addEventListener("click", () => {
     sendMessage(el, input, ul);
   });
@@ -130,7 +134,7 @@ function openProfile(el, data_id, msg) {
   nav.append(img, name, cleardata);
 
   div.append(ul);
-  footer.append(input, button, emojiButton);
+  footer.append( emojiButton ,attachButton ,input, button);
   usersProfile.append(nav, div, footer);
 }
 
