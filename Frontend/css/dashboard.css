@@ -186,16 +186,16 @@ header {
 #clearChatBtn {
     position: absolute;
     /* bottom: 10px; */
-    /* right: 10px; */
-    /* padding: 10px 20px; */
-    background-color: #15e237;
-    /* color: white; */
-    /* border: none; */
+    right: 10px;
+    padding: 10px 20px;
+    background-color: black;
+    color: white;
+    border: none;
     border-radius: 5px;
     cursor: pointer;
 }
 #clearChatBtn:hover {
-    background-color: #f10707;
+    background-color: #15e237;
 }
 #usersHeader{
     display: flex;

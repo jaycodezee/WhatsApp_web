@@ -2,6 +2,7 @@ const socket = io("http://localhost:3000/", {
   transports: ["websocket"],
 });
 
+
 socket.on("receivedMsg", (msg, userId) => {
   const ul = document.getElementById(userId);
   const li = document.createElement("li");
@@ -26,21 +27,22 @@ const groupDiv = document.getElementById("groupDiv");
 const logout = document.getElementById("logout");
 const cleardata = document.getElementById("clearChatBtn");
 
-cleardata.addEventListener("click", (users) => {
-  // console.log(users)
+cleardata.addEventListener("click", () => {
   const urlParams = new URLSearchParams(window.location.search);
   const userId = urlParams.get("id");
 
   const selectedUserItem = document.querySelector(".users_list_item.selected");
-  const otherUserId = selectedUserItem ? selectedUserItem.getAttribute("data-id") : null;
+  const otherUserId = selectedUserItem
+    ? selectedUserItem.getAttribute("data-id")
+    : null;
 
   if (!otherUserId) {
-    console.error("No user selected to clear chat.");
+    alert("No user selected to clear chat.");
     return;
   }
-  
-  console.log("this --->",userId,otherUserId)
-  
+
+  console.log("this --->", userId, otherUserId);
+
   fetch("http://localhost:3000/user/deleteChatMessages", {
     method: "DELETE",
     headers: {
@@ -109,18 +111,26 @@ function openProfile(el, data_id, msg) {
 
   const footer = document.createElement("footer");
   footer.setAttribute("id", "usersFooter");
+
   const input = document.createElement("input");
   input.setAttribute("type", "text");
+
   const button = document.createElement("button");
   button.innerHTML = '<i class="fa-sharp fa-solid fa-paper-plane"></i>';
+
+  const emojiButton = document.createElement("button");
+  emojiButton.innerHTML = "😊";
+  emojiButton.setAttribute("id", "emojiButton");
 
   button.addEventListener("click", () => {
     sendMessage(el, input, ul);
   });
-  nav.append(img, name);
+
+
+  nav.append(img, name, cleardata);
 
   div.append(ul);
-  footer.append(input, button);
+  footer.append(input, button, emojiButton);
   usersProfile.append(nav, div, footer);
 }
 
@@ -142,8 +152,9 @@ function renderConnectedUsers(data) {
     name.textContent = user.name;
 
     li.addEventListener("click", () => {
-
-      document.querySelectorAll(".users_list_item").forEach(item => item.classList.remove("selected"));
+      document
+        .querySelectorAll(".users_list_item")
+        .forEach((item) => item.classList.remove("selected"));
       li.classList.add("selected");
 
       fetch(
@@ -177,8 +188,6 @@ searchBtn.addEventListener("click", () => {
     });
 });
 
-
-
 function renderUsers(users) {
   // console.log(users);
   search_users_list.innerHTML = null;
@@ -198,8 +207,9 @@ function renderUsers(users) {
       query.value = "";
       search_users_list.innerHTML = null;
 
-      // Fetch all messages between the logged-in user and the clicked user
-      fetch(`http://localhost:3000/user/getAllMessages?user1=${userId}&user2=${user._id}`)
+      fetch(
+        `http://localhost:3000/user/getAllMessages?user1=${userId}&user2=${user._id}`
+      )
         .then((res) => res.json())
         .then((messages) => {
           if (messages.length === 0) {
@@ -216,7 +226,9 @@ function renderUsers(users) {
             name.textContent = user.name;
 
             li.addEventListener("click", () => {
-              fetch(`http://localhost:3000/user/getAllMessages?user1=${userId}&user2=${user._id}`)
+              fetch(
+                `http://localhost:3000/user/getAllMessages?user1=${userId}&user2=${user._id}`
+              )
                 .then((res) => res.json())
                 .then((messages) => {
                   openProfile(user, user._id, messages);
@@ -237,14 +249,17 @@ function renderUsers(users) {
   });
 }
 
-
 function sendMessage(el, input, ul) {
   const li = document.createElement("li");
   let today = new Date();
-  let hr = today.getHours() < 10 ? "0" + today.getHours() : today.getHours();
-  let min =
-    today.getMinutes() < 10 ? "0" + today.getMinutes() : today.getMinutes();
-  let time = hr + ":" + min;
+  let hours = today.getHours();
+  let minutes = today.getMinutes();
+  let ampm = hours >= 12 ? "PM" : "AM";
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  let time = hours + ":" + minutes + " " + ampm;
+
   li.className = "send";
   li.textContent = input.value + " " + time;
   ul.append(li);
