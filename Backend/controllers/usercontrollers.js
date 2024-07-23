@@ -101,7 +101,7 @@ const alreadyConnectedUser = async (req, res) => {
             }
         }
 
-        console.log(obj);
+        // console.log(obj);
         let ans = [];
         for (key in obj) {
             const eleUser = await UserModel.findOne({
@@ -171,29 +171,31 @@ const getAllMessages = async (req, res) => {
 }
 
 const deleteChatMessages = async (req, res) => {
-    const { sender, receiver } = req.body;
     try {
-        const userChatData = await UserModel.updateOne(
-            { _id: sender },
-            {
-                $pull: {
-                    chatMessageModel: {
-                        $or: [
-                            { senderId: sender, receiverId: receiver },
-                            { senderId: receiver, receiverId: sender }
-                        ],
-                    },
-                },
-            }
-        );
+        const { userId, otherUserId } = req.body;
+        // console.log('Request Body:', req.body);
 
-        if (userChatData.nModified > 0) {
-            res.status(200).send({ message: "Chat history cleared successfully" });
-        } else {
-            res.status(404).send({ message: "No chat history found between the specified users" });
+        if (!userId || !otherUserId) {
+            return res.status(400).send('Missing userId or otherUserId');
         }
+
+        await UserModel.updateMany(
+            { _id: { $in: [userId, otherUserId] } },
+            { $pull: {
+                chatMessageModel: {
+                    $or: [
+                        { senderId: userId, receiverId: otherUserId },
+                        { senderId: otherUserId, receiverId: userId }
+                    ]
+                }
+            }}
+        );
+        
+        res.status(200).send('Chat cleared');
+        
     } catch (error) {
-        res.status(500).send({ message: "Something went wrong", error: error.message });
+        console.error('Error clearing chat:', error); 
+        res.status(500).send('Error clearing chat');
     }
 };
 

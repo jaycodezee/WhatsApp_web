@@ -5,7 +5,6 @@ const { signup, login, searchUser, alreadyConnectedUser ,allUser , logout , apiR
 const userRoutes = express.Router();
 
 userRoutes.post('/signup',signup);
-
 userRoutes.post('/login',login);
 
 userRoutes.get('/logout',authenticate,logout);

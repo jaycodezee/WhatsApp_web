@@ -24,40 +24,51 @@ const profile_pic = document.getElementById("profile_pic");
 const groupBtn = document.getElementById("groupBtn");
 const groupDiv = document.getElementById("groupDiv");
 const logout = document.getElementById("logout");
-const clearChatBtn =document.getElementById("clearChatBtn")
+const cleardata = document.getElementById("clearChatBtn");
 
+cleardata.addEventListener("click", (users) => {
+  // console.log(users)
+  const urlParams = new URLSearchParams(window.location.search);
+  const userId = urlParams.get("id");
 
-clearChatBtn.addEventListener("click", () => {
-    const confirmClear = confirm('Are you sure you want to clear the chat history?');
-    if (confirmClear) {
-        fetch('http://localhost:3000/user/clearChat', {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ sender: userId, receiver: el._id })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.message === 'Chat history cleared successfully') {
-                ul.innerHTML = '';
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error clearing chat history');
-        });
-    }
+  const selectedUserItem = document.querySelector(".users_list_item.selected");
+  const otherUserId = selectedUserItem ? selectedUserItem.getAttribute("data-id") : null;
+
+  if (!otherUserId) {
+    console.error("No user selected to clear chat.");
+    return;
+  }
+  
+  console.log("this --->",userId,otherUserId)
+  
+  fetch("http://localhost:3000/user/deleteChatMessages", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ userId, otherUserId }),
+  })
+    .then((response) => response.text())
+    .then((data) => {
+      // console.log(data);
+      socket.emit("clear-chat", { userId, otherUserId });
+    })
+    .catch((error) => console.error("Error:", error));
 });
 
+socket.on("deleteChatMessages", ({ userId, otherUserId }) => {
+  // console.log(`Chat cleared for user ${userId} and ${otherUserId}`);
+});
 
+socket.on("error", (message) => {
+  console.error(message);
+});
 
 logout.addEventListener("click", () => {
   window.location.href = "./index.html";
   localStorage.removeItem("token");
 });
+
 const url = new URLSearchParams(window.location.search);
 const userId = url.get("id");
 
@@ -71,7 +82,7 @@ fetch(`http://localhost:3000/user/alreadyConnectedUser?userId=${userId}`)
 
 function openProfile(el, data_id, msg) {
   usersProfile.innerHTML = null;
-  // header
+
   const nav = document.createElement("nav");
   nav.setAttribute("id", "usersHeader");
 
@@ -81,23 +92,21 @@ function openProfile(el, data_id, msg) {
   const name = document.createElement("span");
   name.innerText = el.name;
 
-  // body
   const div = document.createElement("div");
   div.setAttribute("id", "usersChat");
   const ul = document.createElement("ul");
   ul.setAttribute("id", data_id);
 
-  //msg li
   if (msg != undefined) {
     msg.forEach(({ data, type }) => {
-      console.log(data, type);
+      // console.log(data, type);
       const li = document.createElement("li");
       li.textContent = data.message + " " + data.timestamp.substring(11, 16);
       li.className = type;
       ul.append(li);
     });
   }
-  // footer
+
   const footer = document.createElement("footer");
   footer.setAttribute("id", "usersFooter");
   const input = document.createElement("input");
@@ -117,17 +126,26 @@ function openProfile(el, data_id, msg) {
 
 function renderConnectedUsers(data) {
   users_list.innerHTML = null;
+
   data.forEach((user) => {
     const li = document.createElement("li");
     li.setAttribute("class", "users_list_item");
+    li.setAttribute("data-id", user._id);
+
     const img = document.createElement("img");
     img.src = user.picture;
     img.setAttribute("class", "profile_pic");
     img.setAttribute("width", "50px");
     img.setAttribute("height", "50px");
+
     const name = document.createElement("p");
     name.textContent = user.name;
+
     li.addEventListener("click", () => {
+
+      document.querySelectorAll(".users_list_item").forEach(item => item.classList.remove("selected"));
+      li.classList.add("selected");
+
       fetch(
         `http://localhost:3000/user/getAllMessages?user1=${userId}&user2=${user._id}`
       )
@@ -159,59 +177,68 @@ searchBtn.addEventListener("click", () => {
     });
 });
 
+
+
 function renderUsers(users) {
-  console.log(users);
+  // console.log(users);
   search_users_list.innerHTML = null;
-  users.forEach((el) => {
-    console.log(el.name, el.email);
+
+  users.forEach((user) => {
     const div = document.createElement("div");
     div.setAttribute("class", "users_list_container");
+
     const name = document.createElement("span");
-    name.textContent = el.name;
+    name.textContent = user.name;
+
     const img = document.createElement("img");
-    img.src = el.picture;
+    img.src = user.picture;
     img.style.width = "50px";
+
     div.addEventListener("click", () => {
       query.value = "";
       search_users_list.innerHTML = null;
 
-      fetch(
-        `http://localhost:3000/user/getAllMessages?user1=${userId}&user2=${el._id}`
-      )
+      // Fetch all messages between the logged-in user and the clicked user
+      fetch(`http://localhost:3000/user/getAllMessages?user1=${userId}&user2=${user._id}`)
         .then((res) => res.json())
-        .then((res) => {
-          if (res.length == 0) {
+        .then((messages) => {
+          if (messages.length === 0) {
             const li = document.createElement("li");
             li.setAttribute("class", "users_list_item");
+
             const img = document.createElement("img");
-            img.src = el.picture;
+            img.src = user.picture;
             img.setAttribute("class", "profile_pic");
             img.setAttribute("width", "50px");
             img.setAttribute("height", "50px");
+
             const name = document.createElement("p");
-            name.textContent = el.name;
+            name.textContent = user.name;
+
             li.addEventListener("click", () => {
-              fetch(
-                `http://localhost:3000/user/getAllMessages?user1=${userId}&user2=${el._id}`
-              )
+              fetch(`http://localhost:3000/user/getAllMessages?user1=${userId}&user2=${user._id}`)
                 .then((res) => res.json())
-                .then((res) => {
-                  openProfile(el, el._id, res);
+                .then((messages) => {
+                  openProfile(user, user._id, messages);
                 });
             });
+
             li.append(img, name);
             users_list.append(li);
           }
-          openProfile(el, el._id);
+
+          // Open profile with messages
+          openProfile(user, user._id, messages);
         });
     });
+
     div.append(img, name);
     search_users_list.append(div);
   });
 }
 
+
 function sendMessage(el, input, ul) {
-  console.log(input.value, el);
   const li = document.createElement("li");
   let today = new Date();
   let hr = today.getHours() < 10 ? "0" + today.getHours() : today.getHours();
@@ -248,4 +275,3 @@ function renderGroupUsers(users) {
     groupDiv.append(img, name, addBtn);
   });
 }
-

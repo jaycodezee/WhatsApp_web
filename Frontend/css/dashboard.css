@@ -140,7 +140,7 @@ header {
 #usersChat ul {
     height: 64vh;
     padding: 10px;
-    background-image: url("../images/background.jpg");
+    /* background-image: url("../images/background.jpg"); */
    overflow-y: scroll;
     background-repeat: no-repeat;
     background-size: cover;
@@ -150,11 +150,11 @@ header {
     display: none;
   }
   
-  /* Hide scrollbar for IE, Edge and Firefox */
-  #usersChat ul {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-  }
+#usersChat ul {
+    -ms-overflow-style: none;  
+    scrollbar-width: none;  
+}
+
 #groupDiv {
     display: flex;
     flex-direction: column;
@@ -178,24 +178,24 @@ header {
     overflow: hidden;
     background-color: #f0f0f0;
 }
-/* 
-#usersProfile:hover{
-    cursor: pointer;
+
+/* #usersProfile:hover{
+    cursor: pointer; 
 } */
 
 #clearChatBtn {
     position: absolute;
-    bottom: 10px;
-    right: 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: white;
-    border: none;
+    /* bottom: 10px; */
+    /* right: 10px; */
+    /* padding: 10px 20px; */
+    background-color: #15e237;
+    /* color: white; */
+    /* border: none; */
     border-radius: 5px;
     cursor: pointer;
 }
 #clearChatBtn:hover {
-    background-color: #0056b3;
+    background-color: #f10707;
 }
 #usersHeader{
     display: flex;

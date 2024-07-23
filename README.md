@@ -9,16 +9,6 @@ As per [official documentation](https://socket.io/docs/v4/ "Socket.io documentat
 <!-- Horizontal Line -->
 ___
 
-## Small Presentation (Snippets)
-
-![WhatsApp Clone Project Snippets ](./client/img1.png)
-
-![WhatsApp Clone Project Snippets ](./client/img2.png)
-
-![WhatsApp Clone Project Snippets ](./client/img3.png)
-
-- - -
-
 # Tech stack :
 
 ### Frontend 
