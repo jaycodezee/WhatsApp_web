@@ -1,0 +1,284 @@
+*{
+  margin: 0;
+  padding: 0;
+  color: #000000;
+  font-family: "Avenir Next", "Avenir", sans-serif;
+  box-sizing: border-box; 
+}
+body{
+    padding: 0;
+    margin: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+
+}
+.send{
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+    /* border: 1px solid black;s */
+    text-align: end;
+    background-color:#45a793;
+    color: black;
+    border: 1px solid black;
+}
+.receive{
+    border-radius: 10px;
+    padding: 20px;
+    margin: 10px;
+    /* border: 1px solid black; */
+    text-align: start;
+    background-color: rgb(243, 243, 243);
+    border: 1px solid black;
+}
+header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 10px;
+    margin: auto;
+    align-items: center;
+    background-color: #202c33;
+    color: white;
+}
+#profile_section {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    justify-content: space-between;
+}
+#profile_pic {
+    border-radius: 50%;
+}
+#profile_pic :hover{
+     cursor: pointer;
+}
+
+#mainDiv {
+    padding: 10px;
+    width: 100%;
+    background-color: #11191e;
+    border-bottom: 1px solid #393c3e;
+}
+#query{
+    background-color: #393c3e;
+    outline: none;
+    border: none;
+    padding: 10px;
+    color: white;
+    border-radius: 5px;
+}
+.users_list {
+    padding: 5px 20px;
+    height:82vh;
+    width: 30%;
+    background-color: #11191e;
+}
+.search_container {
+    width: 100%;
+}
+#search_users_list_container {
+    position: relative;
+}
+#search_users_list{
+    /* display: none; */
+    background-color: rgb(234, 234, 234);
+    position: absolute;
+    border-right : 1px solid rgb(201, 201, 201);
+    width: 30%;
+    z-index: 1;
+    top:0;
+}
+.users_list_container{
+    min-width: 150px;
+    display: flex;
+    padding: 5px;
+    align-items: center;
+    background-color: #393c3e;
+}
+.users_list_container img{
+    border-radius: 50%;
+}
+.users_list_container span{
+    margin-left: 10px;
+    color: white;
+}
+.search_container input {
+    width: 320px;
+    outline: none;
+    border-radius: 3px;
+    border: 1px solid rgb(189, 185, 185);
+    padding: 5px;
+    font-size: 14px;
+}
+.search_container button {
+    outline: none;
+    border-radius: 3px;
+    border: 1px solid rgb(189, 185, 185);
+    padding: 5px 7px;
+    font-size: 14px;
+}
+.users_list_item > img{
+    border-radius: 50%;
+} 
+.users_list_item > p{
+    color: white;
+}
+#searchBtn{
+    padding: 9px;
+    color: white;
+    background-color: #393c3e;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+#searchBtn:hover{
+    color: #15e237;
+}
+#usersChat ul {
+    height: 64vh;
+    padding: 10px;
+    background-image: url("../images/background.jpg");
+   overflow-y: scroll;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+#usersChat ul::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  #usersChat ul {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+#groupDiv {
+    display: flex;
+    flex-direction: column;
+}
+.users_list_item{
+    display: flex;
+    align-items: center;
+    gap:15px;
+    border-bottom: 1px solid #393c3e;
+    padding-bottom: 10px;
+    margin: 10px 0;
+}
+
+#msgContainer{
+    display: flex;
+}
+#usersProfile{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #f0f0f0;
+}
+/* 
+#usersProfile:hover{
+    cursor: pointer;
+} */
+
+#clearChatBtn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+#clearChatBtn:hover {
+    background-color: #0056b3;
+}
+#usersHeader{
+    display: flex;
+    align-items: center;
+    gap:10px;
+    background-color: #303d45;
+    padding: 20px;
+}
+#usersHeader > span {
+    color: white;
+}
+#usersHeader > img {
+    border-radius: 50%;
+}
+/* input button */
+#usersFooter{
+    padding: 10px;
+    background-color: #202c33;
+    display: flex;
+    justify-content: space-between;
+}
+#usersFooter input{
+    width:96%;
+    padding: 8px;
+    border-radius: 3px;
+    outline: none;
+    border: 10;
+    margin-right: 7px;
+}
+#usersFooter button{
+    margin: auto;
+    width: 40px;
+     padding: 8px;
+     background-color: rgb(0, 0, 0);
+     color: white;
+     outline: none;
+     border: none;
+     border-radius: 3px;
+}
+#usersFooter button:hover{
+    background-color: #15e237;
+}
+#usersFooter button i{
+    color: white;
+}
+li{
+    list-style: none;
+}
+
+@media only screen and (max-width: 700px) {
+    #usersProfile{
+        width: 68%;
+    }
+    #usersChat > ul > li {
+        font-size: 12px;
+    }
+    .users_list{
+        width: 32%;
+        font-size: 14px;
+    }
+    #usersHeader{
+        font-size: 14px;
+    }
+    .users_list img{
+        width: 40px;
+        height: 40px;
+    }
+  }
+  @media only screen and (max-width: 500px){
+    #usersProfile{
+        width: 100%;
+        /* display: none; */
+    }
+    .users_list{
+        width: 100%;
+        font-size: 18px;
+        display: none;
+    }
+    .search_container{
+        display: flex;
+        gap: 5px;
+    }
+    #left_half , #profile_name{
+        font-size: 18px !important;
+    }
+  }
